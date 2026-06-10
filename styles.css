@@ -65,7 +65,7 @@ body{
 .streak-chip svg{ width:16px; height:16px; color:var(--green-deep); }
 
 /* ===== T/F 토글 ===== */
-.mode-toggle{ display:flex; background:#e3ece0; border-radius:999px; padding:5px; gap:4px; margin-bottom:8px; }
+.mode-toggle{ display:flex; background:#e3ece0; border-radius:999px; padding:5px; gap:4px; margin:22px 0 8px; }
 .mode-btn{
   flex:1; padding:12px 0; border:none; background:transparent; border-radius:999px;
   font-family:inherit; font-size:14px; font-weight:500; color:var(--sub); cursor:pointer; transition:.18s;
