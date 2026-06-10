@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>기획안 — 디지털디톡스 코치</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    body{ font-family:'Noto Sans KR',-apple-system,sans-serif; max-width:820px; margin:0 auto; padding:40px 24px 80px; color:#23282b; line-height:1.7; }
+    h1{ font-size:30px; border-bottom:2px solid #34c759; padding-bottom:12px; }
+    h2{ font-size:23px; margin-top:38px; color:#1f9e4a; }
+    h3{ font-size:18px; margin-top:26px; }
+    table{ border-collapse:collapse; width:100%; margin:16px 0; }
+    th,td{ border:1px solid #e0e4e0; padding:8px 12px; text-align:left; }
+    th{ background:#f0fbf3; }
+    code{ background:#f1f3f1; padding:2px 6px; border-radius:6px; font-size:14px; }
+    blockquote{ border-left:4px solid #34c759; margin:16px 0; padding:6px 16px; background:#f6faf7; color:#445; }
+    hr{ border:none; border-top:1px solid #e6e9e6; margin:30px 0; }
+    a.back{ display:inline-block; margin-bottom:20px; color:#1f9e4a; text-decoration:none; font-weight:700; }
+  </style>
+</head>
+<body>
+  <a class="back" href="/">← 앱 프로토타입으로</a>
+  <div id="content">불러오는 중…</div>
+  <script>
+    fetch('기획안.md')
+      .then(r => r.text())
+      .then(md => { document.getElementById('content').innerHTML = marked.parse(md); })
+      .catch(() => { document.getElementById('content').textContent = '문서를 불러오지 못했습니다.'; });
+  </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>디지털디톡스 코치</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="device">
+    <!-- ===== 온보딩 / 권한 동의 ===== -->
+    <section id="onboarding" class="screen onboarding">
+      <div class="ob-inner">
+        <div class="ob-emoji">🌿</div>
+        <h1 class="ob-title">디지털디톡스 코치</h1>
+        <p class="ob-sub">캐릭터 코치가 휴대폰 사용시간에 맞춰<br/>디지털디톡스를 도와드려요.</p>
+
+        <div class="ob-card">
+          <label class="consent">
+            <input type="checkbox" id="agreePrivacy" />
+            <span class="consent-box"></span>
+            <span class="consent-text">
+              <b>개인정보 수집·이용 동의</b> (필수)<br/>
+              <small>사용시간 분석 및 코칭 제공을 위해 기기 사용 정보를 수집합니다.</small>
+            </span>
+          </label>
+          <label class="consent">
+            <input type="checkbox" id="agreeUsage" />
+            <span class="consent-box"></span>
+            <span class="consent-text">
+              <b>사용정보 접근 권한 동의</b> (필수)<br/>
+              <small>Android 사용정보 접근 권한(Usage Stats)으로 휴대폰 사용시간을 측정합니다.</small>
+            </span>
+          </label>
+        </div>
+
+        <p class="ob-note">* 프로토타입에서는 실제 권한 대신 임시 데이터로 동작합니다.</p>
+        <button id="startBtn" class="btn-primary" disabled>시작하기</button>
+      </div>
+    </section>
+
+    <!-- ===== 홈 ===== -->
+    <section id="home" class="screen app-screen hidden">
+      <div class="scroll">
+        <header class="top">
+          <p class="top-title">오늘의 디지털디톡스</p>
+          <p class="top-sub">휴대폰과 조금만 거리두기 해볼까요?</p>
+        </header>
+
+        <div id="character" class="character">
+          <div class="char-ring">
+            <div id="charFace" class="char-face">😄</div>
+          </div>
+          <span id="stateLabel" class="state-label">아주 좋은 흐름</span>
+        </div>
+
+        <div class="bubble-wrap">
+          <div id="bubble" class="bubble">멘트가 표시됩니다.</div>
+        </div>
+
+        <div class="card usage-card">
+          <p class="card-label">오늘 사용시간</p>
+          <p id="usageBig" class="usage-big">3시간 24분</p>
+          <p id="goalStatus" class="goal-status pos">목표보다 42분 적게 사용 중</p>
+        </div>
+
+        <div class="card goal-card">
+          <div class="goal-row">
+            <span class="goal-text">목표 시간 <b id="goalText">3시간</b></span>
+            <button id="editGoalBtn" class="btn-mini">목표 수정</button>
+          </div>
+        </div>
+
+        <div class="mode-toggle">
+          <button id="modeT" class="mode-btn active">
+            <span class="mode-big">T 모드</span>
+            <span class="mode-desc">팩폭 코칭</span>
+          </button>
+          <button id="modeF" class="mode-btn">
+            <span class="mode-big">F 모드</span>
+            <span class="mode-desc">다정 코칭</span>
+          </button>
+        </div>
+
+        <div class="demo-card">
+          <p class="demo-title">🧪 데모용 · 사용시간 조절</p>
+          <input id="usageSlider" type="range" min="0" max="600" step="5" value="204" />
+          <p class="demo-hint">실제 출시 시 Android Usage Stats로 자동 측정됩니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 기록 ===== -->
+    <section id="record" class="screen app-screen hidden">
+      <div class="scroll">
+        <header class="top">
+          <p class="top-title">기록</p>
+          <p class="top-sub">사용시간 흐름을 가볍게 확인해요.</p>
+        </header>
+
+        <div class="seg">
+          <button id="segDaily" class="seg-btn active">일간</button>
+          <button id="segMonthly" class="seg-btn">월간</button>
+        </div>
+
+        <div class="card">
+          <p id="recTotalLabel" class="card-label">오늘 총 사용시간</p>
+          <p id="recTotal" class="usage-big">4시간 12분</p>
+        </div>
+
+        <div class="card compare-card">
+          <p class="card-label" id="recCompareLabel">전일 대비</p>
+          <p id="recCompare" class="compare-val up">전일보다 32분 증가</p>
+        </div>
+
+        <div class="card chart-card">
+          <p class="card-label" id="recChartLabel">최근 7일</p>
+          <div id="chart" class="chart"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 하단 네비 ===== -->
+    <nav class="bottom-nav hidden" id="bottomNav">
+      <button class="nav-btn active" data-tab="home">
+        <span class="nav-ico">🏠</span><span class="nav-txt">홈</span>
+      </button>
+      <button class="nav-btn" data-tab="record">
+        <span class="nav-ico">📊</span><span class="nav-txt">기록</span>
+      </button>
+    </nav>
+
+    <!-- ===== 목표 설정 모달 ===== -->
+    <div id="goalModal" class="modal-overlay hidden">
+      <div class="modal">
+        <p class="modal-title">목표 시간 설정</p>
+        <div class="goal-options" id="goalOptions">
+          <button class="goal-opt" data-min="60">1시간</button>
+          <button class="goal-opt" data-min="120">2시간</button>
+          <button class="goal-opt" data-min="180">3시간</button>
+          <button class="goal-opt" data-min="240">4시간</button>
+          <button class="goal-opt" data-min="300">5시간</button>
+        </div>
+        <div class="goal-custom">
+          <span>직접 입력</span>
+          <input id="goalCustom" type="number" min="1" max="24" placeholder="시간" />
+          <span>시간</span>
+        </div>
+        <div class="modal-actions">
+          <button id="goalCancel" class="btn-ghost">취소</button>
+          <button id="goalSave" class="btn-primary small">저장</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
