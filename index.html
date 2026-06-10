@@ -63,31 +63,54 @@
           <div class="char-shadow"></div>
         </div>
 
-        <!-- 끄숑 컨디션 (펫 케어형 상태) -->
-        <div id="conditionCard" class="card condition-card">
-          <div class="cond-top">
-            <span id="condFace" class="cond-face"></span>
-            <div class="cond-meta">
-              <span id="condName" class="cond-name">기분 좋은 끄숑</span>
-              <span id="condPct" class="cond-sub">컨디션 72%</span>
-            </div>
-          </div>
-          <div class="cond-gauge"><div id="condFill" class="cond-fill"></div></div>
-          <p id="condMsg" class="cond-msg">끄숑이 아직 쌩쌩해요. 잘 지켜주고 있어요.</p>
-        </div>
+        <!-- ===== 하단 글래스 카드 영역 (2026 Liquid-Glass / Bento) ===== -->
+        <div class="dock">
 
-        <!-- 오늘 사용시간 + 목표 -->
-        <div class="card usage-card">
-          <div class="usage-head">
-            <span class="card-label">오늘 사용시간</span>
-            <button id="editGoalBtn" class="goal-edit">
-              목표 <b id="goalText">3시간</b>
-              <svg class="goal-edit-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-            </button>
+          <!-- 끄숑 컨디션 (펫 케어형 상태) -->
+          <div id="conditionCard" class="glass-card condition-card">
+            <div class="gc-head">
+              <span class="gc-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></svg>
+              </span>
+              <span class="gc-title">오늘의 상태</span>
+            </div>
+
+            <div class="cond-body">
+              <span id="condFace" class="cond-face"></span>
+              <div class="cond-meta">
+                <span id="condName" class="cond-name">기분 좋은 끄숑</span>
+                <span id="condPct" class="cond-sub">컨디션 72%</span>
+              </div>
+            </div>
+
+            <div class="cond-gauge"><div id="condFill" class="cond-fill"></div></div>
+            <p id="condMsg" class="cond-msg">끄숑이 아직 쌩쌩해요. 잘 지켜주고 있어요.</p>
+
+            <!-- 일러스트 슬롯: 복슬 하트 -->
+            <span class="deco-slot deco-blob" data-label="blob">
+              <img src="assets/characters/deco1.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('empty')" />
+            </span>
           </div>
-          <p id="usageBig" class="usage-big">2시간 15분</p>
-          <div class="usage-bar"><div id="usageFill" class="usage-fill"></div></div>
-          <p id="goalStatus" class="goal-status-line pos">목표까지 45분 남았어요</p>
+
+          <!-- 오늘 사용시간 + 목표 -->
+          <div class="glass-card usage-card">
+            <div class="usage-head">
+              <span class="card-label">오늘 사용시간</span>
+              <button id="editGoalBtn" class="goal-edit">
+                목표 <b id="goalText">3시간</b>
+                <svg class="goal-edit-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+              </button>
+            </div>
+            <p id="usageBig" class="usage-big">2시간 15분</p>
+            <div class="usage-bar"><div id="usageFill" class="usage-fill"></div></div>
+            <p id="goalStatus" class="goal-status-line pos">목표까지 45분 남았어요</p>
+
+            <!-- 일러스트 슬롯: 펠트 꽃 -->
+            <span class="deco-slot deco-flower" data-label="flower">
+              <img src="assets/characters/deco2.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('empty')" />
+            </span>
+          </div>
+
         </div>
       </div>
     </section>

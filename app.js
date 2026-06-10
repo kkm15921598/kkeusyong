@@ -172,9 +172,10 @@ function todayStr(){
 // 한국시간(KST=UTC+9) 기준 시간대별 배경 — 사용자의 기기 타임존과 무관하게 KST로 판정
 function currentBg(){
   const hKST = new Date(Date.now() + 9 * 3600000).getUTCHours(); // 0~23 (KST)
-  if(hKST >= 6 && hKST <= 12)  return 'assets/characters/bg1.png';  // 06:00 ~ 12:59
-  if(hKST >= 13 && hKST <= 18) return 'assets/characters/bg2.png';  // 13:00 ~ 18:59
-  return 'assets/characters/bg3.png';                                // 19:00 ~ 05:59
+  if(hKST >= 5  && hKST <= 10) return 'assets/characters/bg0.png';  // 05:00 ~ 10:59
+  if(hKST >= 11 && hKST <= 16) return 'assets/characters/bg1.png';  // 11:00 ~ 16:59
+  if(hKST >= 17 && hKST <= 19) return 'assets/characters/bg2.png';  // 17:00 ~ 19:59
+  return 'assets/characters/bg3.png';                                // 20:00 ~ 04:59
 }
 
 // ---- 홈 렌더 ----
