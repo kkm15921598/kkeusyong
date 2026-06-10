@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>디지털디톡스 코치</title>
+  <title>끄슝 · 디지털디톡스 코치</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
@@ -14,9 +14,9 @@
     <!-- ===== 온보딩 / 권한 동의 ===== -->
     <section id="onboarding" class="screen onboarding">
       <div class="ob-inner">
-        <div class="ob-emoji">🌿</div>
-        <h1 class="ob-title">디지털디톡스 코치</h1>
-        <p class="ob-sub">캐릭터 코치가 휴대폰 사용시간에 맞춰<br/>디지털디톡스를 도와드려요.</p>
+        <img class="ob-char" src="assets/characters/kkeusyong.png" alt="끄슝" />
+        <h1 class="ob-title">끄슝</h1>
+        <p class="ob-sub">끄슝이가 휴대폰 사용시간에 맞춰<br/>디지털디톡스를 도와드려요.</p>
 
         <div class="ob-card">
           <label class="consent">
@@ -38,57 +38,51 @@
         </div>
 
         <p class="ob-note">* 프로토타입에서는 실제 권한 대신 임시 데이터로 동작합니다.</p>
-        <button id="startBtn" class="btn-primary" disabled>시작하기</button>
+        <button id="startBtn" class="btn-primary" disabled>끄슝이랑 시작하기</button>
       </div>
     </section>
 
     <!-- ===== 홈 ===== -->
     <section id="home" class="screen app-screen hidden">
       <div class="scroll">
-        <header class="top">
-          <p class="top-title">오늘의 디지털디톡스</p>
-          <p class="top-sub">휴대폰과 조금만 거리두기 해볼까요?</p>
-        </header>
-
-        <div id="character" class="character">
-          <div class="char-ring">
-            <div id="charFace" class="char-face">😄</div>
-          </div>
-          <span id="stateLabel" class="state-label">아주 좋은 흐름</span>
+        <!-- T/F 토글 + 날짜 -->
+        <div class="mode-toggle">
+          <button id="modeT" class="mode-btn active">T 모드</button>
+          <button id="modeF" class="mode-btn">F 모드</button>
         </div>
+        <p id="todayDate" class="today-date">2026.06.10</p>
 
+        <!-- 말풍선 -->
         <div class="bubble-wrap">
           <div id="bubble" class="bubble">멘트가 표시됩니다.</div>
         </div>
 
-        <div class="card usage-card">
-          <p class="card-label">오늘 사용시간</p>
-          <p id="usageBig" class="usage-big">3시간 24분</p>
-          <p id="goalStatus" class="goal-status pos">목표보다 42분 적게 사용 중</p>
+        <!-- 캐릭터 -->
+        <div id="character" class="character">
+          <div class="char-glow"></div>
+          <div class="char-stage">
+            <img id="charImg" class="char-img" src="assets/characters/kkeusyong.png" alt="끄슝" />
+          </div>
         </div>
 
-        <div class="card goal-card">
+        <!-- 오늘 사용시간 카드 -->
+        <div class="card usage-card">
+          <p class="card-label">오늘 휴대폰 사용시간</p>
+          <p id="usageBig" class="usage-big">2시간 15분</p>
+          <p id="goalStatus" class="goal-status pos">목표보다 45분 적게 사용했어요</p>
           <div class="goal-row">
             <span class="goal-text">목표 시간 <b id="goalText">3시간</b></span>
             <button id="editGoalBtn" class="btn-mini">목표 수정</button>
           </div>
         </div>
 
-        <div class="mode-toggle">
-          <button id="modeT" class="mode-btn active">
-            <span class="mode-big">T 모드</span>
-            <span class="mode-desc">팩폭 코칭</span>
-          </button>
-          <button id="modeF" class="mode-btn">
-            <span class="mode-big">F 모드</span>
-            <span class="mode-desc">다정 코칭</span>
-          </button>
-        </div>
-
-        <div class="demo-card">
-          <p class="demo-title">🧪 데모용 · 사용시간 조절</p>
-          <input id="usageSlider" type="range" min="0" max="600" step="5" value="204" />
-          <p class="demo-hint">실제 출시 시 Android Usage Stats로 자동 측정됩니다.</p>
+        <!-- 캐릭터 상태 카드 : 5단계 전체 + 현재 단계 강조 -->
+        <div id="stateCard" class="card state-card">
+          <div class="state-head">
+            <span class="card-label">캐릭터 상태</span>
+            <span id="stateNow" class="state-now">2단계 · 괜찮은 편</span>
+          </div>
+          <div id="stageTrack" class="stage-track"></div>
         </div>
       </div>
     </section>
@@ -124,12 +118,26 @@
     </section>
 
     <!-- ===== 하단 네비 ===== -->
+    <!-- 아이콘: Lucide (ISC License — 상업적 이용·수정 가능, 출처표기 불필요) -->
     <nav class="bottom-nav hidden" id="bottomNav">
       <button class="nav-btn active" data-tab="home">
-        <span class="nav-ico">🏠</span><span class="nav-txt">홈</span>
+        <span class="nav-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
+            <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          </svg>
+        </span>
+        <span class="nav-txt">홈</span>
       </button>
       <button class="nav-btn" data-tab="record">
-        <span class="nav-ico">📊</span><span class="nav-txt">기록</span>
+        <span class="nav-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3v16a2 2 0 0 0 2 2h16"/>
+            <rect x="7" y="11" width="3" height="6" rx="1"/>
+            <rect x="13" y="7" width="3" height="10" rx="1"/>
+          </svg>
+        </span>
+        <span class="nav-txt">기록</span>
       </button>
     </nav>
 

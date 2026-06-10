@@ -1,8 +1,8 @@
-/* ===== 디지털디톡스 코치 · 프로토타입 로직 ===== */
+/* ===== 끄슝 · 디지털디톡스 코치 · 프로토타입 로직 ===== */
 
 // ---- 상태 ----
 const store = {
-  get usage(){ return +(localStorage.getItem('usage') ?? 204); },        // 분
+  get usage(){ return +(localStorage.getItem('usage') ?? 135); },        // 분 (임시 데이터)
   set usage(v){ localStorage.setItem('usage', v); },
   get goal(){ return +(localStorage.getItem('goal') ?? 180); },          // 분 (기본 3시간)
   set goal(v){ localStorage.setItem('goal', v); },
@@ -12,13 +12,24 @@ const store = {
   set onboarded(v){ localStorage.setItem('onboarded', v ? '1':'0'); },
 };
 
-// ---- 단계 정의 ----
+// ---- 표정 아이콘 (Lucide · ISC License — 상업적 이용·수정·재배포 자유, 출처표기 불필요) ----
+const FACE = {
+  laugh:'<circle cx="12" cy="12" r="10"/><path d="M18 13a6 6 0 0 1-6 5 6 6 0 0 1-6-5h12Z"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/>',
+  smile:'<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/>',
+  meh:'<circle cx="12" cy="12" r="10"/><line x1="8" x2="16" y1="14" y2="14"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/>',
+  frown:'<circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/>',
+  angry:'<circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><path d="M7.5 8 10 9"/><path d="m14 9 2.5-1"/><path d="M9 10h.01"/><path d="M15 10h.01"/>',
+};
+
+// ---- 단계 정의 (사용시간 5단계) ----
+// img: 단계별 캐릭터 그림이 준비되면 경로만 교체하면 외형 변화로도 확장 가능
+const CHAR = 'assets/characters/kkeusyong.png';
 const LEVELS = [
-  { name:'아주 좋은 흐름', face:'😄', ring:'#bdeccb', light:'#d6f5e0', shadow:'rgba(52,199,89,.22)' },
-  { name:'괜찮은 편',     face:'🙂', ring:'#bfe6f6', light:'#dcf2fb', shadow:'rgba(90,200,250,.22)' },
-  { name:'주의 필요',     face:'😟', ring:'#ffe8a3', light:'#fff4cf', shadow:'rgba(255,204,0,.28)' },
-  { name:'사용시간 많음', face:'😤', ring:'#ffd6a8', light:'#ffe9cf', shadow:'rgba(255,149,0,.28)' },
-  { name:'디톡스 필요',   face:'😫', ring:'#ffc2bd', light:'#ffd9d6', shadow:'rgba(255,59,48,.3)' },
+  { name:'아주 좋은 흐름', icon:FACE.laugh, accent:'#5bbd72', soft:'#eaf6ec', filter:'none', img:CHAR },
+  { name:'괜찮은 편',     icon:FACE.smile, accent:'#7cb95f', soft:'#eef6e3', filter:'none', img:CHAR },
+  { name:'주의 필요',     icon:FACE.meh,   accent:'#e3ad36', soft:'#fbf2d8', filter:'saturate(.95)', img:CHAR },
+  { name:'사용시간 많음', icon:FACE.frown, accent:'#e3893c', soft:'#fbecdc', filter:'saturate(.85) brightness(.97)', img:CHAR },
+  { name:'디톡스 필요',   icon:FACE.angry, accent:'#df564b', soft:'#fbe6e3', filter:'saturate(.7) brightness(.94)', img:CHAR },
 ];
 
 // ---- 멘트 ----
@@ -63,20 +74,29 @@ function levelOf(min){
 function pick(arr, seed){ return arr[seed % arr.length]; }
 let mentSeed = 0;
 
+function todayStr(){
+  const d = new Date();
+  const p = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}.${p(d.getMonth()+1)}.${p(d.getDate())}`;
+}
+
 // ---- 홈 렌더 ----
 function renderHome(){
   const usage = store.usage, goal = store.goal, mode = store.mode;
   const lv = levelOf(usage);
   const L = LEVELS[lv];
 
-  // 캐릭터
-  $('charFace').textContent = L.face;
-  $('stateLabel').textContent = L.name;
-  const ring = $('character').querySelector('.char-ring');
-  ring.style.setProperty('--ring', L.ring);
-  ring.style.setProperty('--ring-light', L.light);
-  ring.style.setProperty('--ring-shadow', L.shadow);
-  $('stateLabel').style.setProperty('--ring', L.ring);
+  // accent 색 전체 반영
+  document.documentElement.style.setProperty('--accent', L.accent);
+  document.documentElement.style.setProperty('--accent-soft', L.soft);
+
+  // 캐릭터 이미지 (지금은 동일, 단계별 그림 준비 시 L.img 교체로 외형 변화 가능)
+  const img = $('charImg');
+  if(img.getAttribute('src') !== L.img) img.setAttribute('src', L.img);
+  img.style.filter = `${L.filter==='none'?'':L.filter+' '}drop-shadow(0 14px 20px rgba(120,100,70,.2))`;
+
+  // 날짜
+  $('todayDate').textContent = todayStr();
 
   // 말풍선
   $('bubble').textContent = pick(MENTS[mode][lv], mentSeed);
@@ -87,22 +107,27 @@ function renderHome(){
   // 목표 대비
   const gs = $('goalStatus');
   if(usage <= goal){
-    gs.textContent = `목표보다 ${fmt(goal - usage)} 적게 사용 중`;
+    gs.textContent = `목표보다 ${fmt(goal - usage)} 적게 사용했어요`;
     gs.className = 'goal-status pos';
   }else{
-    gs.textContent = `목표보다 ${fmt(usage - goal)} 초과`;
+    gs.textContent = `목표보다 ${fmt(usage - goal)} 초과했어요`;
     gs.className = 'goal-status neg';
   }
 
   // 목표 텍스트
   $('goalText').textContent = fmt(goal);
 
+  // 상태 카드 — 현재 단계명 + 5단계 전체 트래커(현재 단계 강조)
+  $('stateNow').textContent = `${lv + 1}단계 · ${L.name}`;
+  $('stageTrack').innerHTML = LEVELS.map((s, i) =>
+    `<div class="stage-item ${i === lv ? 'active' : ''}">
+       <span class="stage-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${s.icon}</svg></span>
+       <span class="stage-num">${i + 1}</span>
+     </div>`).join('');
+
   // 모드 버튼
   $('modeT').classList.toggle('active', mode === 'T');
   $('modeF').classList.toggle('active', mode === 'F');
-
-  // 슬라이더 동기화
-  $('usageSlider').value = usage;
 }
 
 // ---- 기록 렌더 ----
@@ -110,9 +135,8 @@ let recView = 'daily';
 function renderRecord(){
   const isDaily = recView === 'daily';
   const data = isDaily ? DAILY : MONTHLY;
-  // 오늘/이번달 값은 홈 사용시간과 연동 (마지막 막대)
   const vals = data.vals.slice();
-  if(isDaily) vals[vals.length-1] = store.usage;
+  if(isDaily) vals[vals.length-1] = store.usage;   // 오늘 막대는 현재 사용시간과 연동
 
   const cur = vals[vals.length-1];
   const prev = vals[vals.length-2];
@@ -181,11 +205,6 @@ document.querySelectorAll('.nav-btn').forEach(b =>
 // 모드
 $('modeT').addEventListener('click', () => { store.mode='T'; mentSeed++; renderHome(); });
 $('modeF').addEventListener('click', () => { store.mode='F'; mentSeed++; renderHome(); });
-
-// 데모 슬라이더
-$('usageSlider').addEventListener('input', e => {
-  store.usage = +e.target.value; mentSeed++; renderHome();
-});
 
 // 기록 세그먼트
 $('segDaily').addEventListener('click', () => { recView='daily'; renderRecord(); });
