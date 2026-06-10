@@ -3,20 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>끄슝 · 디지털디톡스 코치</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <title>끄숑 · 디지털디톡스 코치</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="device">
+ <div class="viewport">
+  <div class="device" id="device">
+
     <!-- ===== 온보딩 / 권한 동의 ===== -->
     <section id="onboarding" class="screen onboarding">
       <div class="ob-inner">
-        <img class="ob-char" src="assets/characters/kkeusyong.png" alt="끄슝" />
-        <h1 class="ob-title">끄슝</h1>
-        <p class="ob-sub">끄슝이가 휴대폰 사용시간에 맞춰<br/>디지털디톡스를 도와드려요.</p>
+        <img class="ob-char" src="assets/characters/kkeusyong.png" alt="끄숑" />
+        <h1 class="ob-title">끄숑</h1>
+        <p class="ob-sub">끄숑이가 휴대폰 사용시간에 맞춰<br/>디지털디톡스를 도와드려요.</p>
 
         <div class="ob-card">
           <label class="consent">
@@ -38,51 +39,61 @@
         </div>
 
         <p class="ob-note">* 프로토타입에서는 실제 권한 대신 임시 데이터로 동작합니다.</p>
-        <button id="startBtn" class="btn-primary" disabled>끄슝이랑 시작하기</button>
+        <button id="startBtn" class="btn-primary" disabled>끄숑이랑 시작하기</button>
       </div>
     </section>
 
     <!-- ===== 홈 ===== -->
     <section id="home" class="screen app-screen hidden">
+      <div class="home-bg" id="homeBg"></div>
       <div class="scroll">
-        <!-- T/F 토글 + 날짜 -->
-        <div class="mode-toggle">
-          <button id="modeT" class="mode-btn active">T 모드</button>
-          <button id="modeF" class="mode-btn">F 모드</button>
+        <div class="home-top">
+          <div>
+            <p class="home-hi">휴대폰 끄숑</p>
+          </div>
         </div>
-        <p id="todayDate" class="today-date">2026.06.10</p>
 
-        <!-- 말풍선 -->
+        <div class="mode-toggle">
+          <button id="modeT" class="mode-btn active">T 끄숑</button>
+          <button id="modeF" class="mode-btn">F 끄숑</button>
+        </div>
+
         <div class="bubble-wrap">
           <div id="bubble" class="bubble">멘트가 표시됩니다.</div>
         </div>
 
-        <!-- 캐릭터 -->
         <div id="character" class="character">
-          <div class="char-glow"></div>
           <div class="char-stage">
-            <img id="charImg" class="char-img" src="assets/characters/kkeusyong.png" alt="끄슝" />
+            <img id="charImg" class="char-img" src="assets/characters/kkeusyong.png" alt="끄숑" />
           </div>
+          <div class="char-shadow"></div>
         </div>
 
-        <!-- 오늘 사용시간 카드 -->
+        <!-- 끄숑 컨디션 (펫 케어형 상태) -->
+        <div id="conditionCard" class="card condition-card">
+          <div class="cond-top">
+            <span id="condFace" class="cond-face"></span>
+            <div class="cond-meta">
+              <span id="condName" class="cond-name">기분 좋은 끄숑</span>
+              <span id="condPct" class="cond-sub">컨디션 72%</span>
+            </div>
+          </div>
+          <div class="cond-gauge"><div id="condFill" class="cond-fill"></div></div>
+          <p id="condMsg" class="cond-msg">끄숑이 아직 쌩쌩해요. 잘 지켜주고 있어요.</p>
+        </div>
+
+        <!-- 오늘 사용시간 + 목표 -->
         <div class="card usage-card">
-          <p class="card-label">오늘 휴대폰 사용시간</p>
+          <div class="usage-head">
+            <span class="card-label">오늘 사용시간</span>
+            <button id="editGoalBtn" class="goal-edit">
+              목표 <b id="goalText">3시간</b>
+              <svg class="goal-edit-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            </button>
+          </div>
           <p id="usageBig" class="usage-big">2시간 15분</p>
-          <p id="goalStatus" class="goal-status pos">목표보다 45분 적게 사용했어요</p>
-          <div class="goal-row">
-            <span class="goal-text">목표 시간 <b id="goalText">3시간</b></span>
-            <button id="editGoalBtn" class="btn-mini">목표 수정</button>
-          </div>
-        </div>
-
-        <!-- 캐릭터 상태 카드 : 5단계 전체 + 현재 단계 강조 -->
-        <div id="stateCard" class="card state-card">
-          <div class="state-head">
-            <span class="card-label">캐릭터 상태</span>
-            <span id="stateNow" class="state-now">2단계 · 괜찮은 편</span>
-          </div>
-          <div id="stageTrack" class="stage-track"></div>
+          <div class="usage-bar"><div id="usageFill" class="usage-fill"></div></div>
+          <p id="goalStatus" class="goal-status-line pos">목표까지 45분 남았어요</p>
         </div>
       </div>
     </section>
@@ -95,30 +106,41 @@
           <p class="top-sub">사용시간 흐름을 가볍게 확인해요.</p>
         </header>
 
-        <div class="seg">
-          <button id="segDaily" class="seg-btn active">일간</button>
-          <button id="segMonthly" class="seg-btn">월간</button>
-        </div>
+        <div class="rec-body">
+          <div class="seg">
+            <button id="segDaily" class="seg-btn active">일간</button>
+            <button id="segMonthly" class="seg-btn">월간</button>
+          </div>
 
-        <div class="card">
-          <p id="recTotalLabel" class="card-label">오늘 총 사용시간</p>
-          <p id="recTotal" class="usage-big">4시간 12분</p>
-        </div>
+          <div class="card total-card">
+            <p id="recTotalLabel" class="card-label">오늘 총 사용시간</p>
+            <p id="recTotal" class="usage-big">4시간 12분</p>
+            <p id="recCompare" class="compare-line up">↑ 어제보다 32분 많아요</p>
+          </div>
 
-        <div class="card compare-card">
-          <p class="card-label" id="recCompareLabel">전일 대비</p>
-          <p id="recCompare" class="compare-val up">전일보다 32분 증가</p>
-        </div>
+          <div class="stat-strip">
+            <div class="stat-mini">
+              <span class="stat-mini-label" id="statAvgLabel">일 평균</span>
+              <b id="statAvg">3시간 4분</b>
+            </div>
+            <div class="stat-mini">
+              <span class="stat-mini-label" id="statPeakLabel">가장 적은 날</span>
+              <b id="statPeak">월 2시간</b>
+            </div>
+          </div>
 
-        <div class="card chart-card">
-          <p class="card-label" id="recChartLabel">최근 7일</p>
-          <div id="chart" class="chart"></div>
+          <div class="card chart-card">
+            <div class="chart-head">
+              <p class="card-label" id="recChartLabel">최근 7일</p>
+              <span class="chart-legend"><i class="dot now"></i><span id="chartLegendTxt">오늘</span></span>
+            </div>
+            <div id="chart" class="chart"></div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- ===== 하단 네비 ===== -->
-    <!-- 아이콘: Lucide (ISC License — 상업적 이용·수정 가능, 출처표기 불필요) -->
     <nav class="bottom-nav hidden" id="bottomNav">
       <button class="nav-btn active" data-tab="home">
         <span class="nav-ico">
@@ -145,17 +167,19 @@
     <div id="goalModal" class="modal-overlay hidden">
       <div class="modal">
         <p class="modal-title">목표 시간 설정</p>
-        <div class="goal-options" id="goalOptions">
-          <button class="goal-opt" data-min="60">1시간</button>
-          <button class="goal-opt" data-min="120">2시간</button>
-          <button class="goal-opt" data-min="180">3시간</button>
-          <button class="goal-opt" data-min="240">4시간</button>
-          <button class="goal-opt" data-min="300">5시간</button>
+        <p class="modal-sub">하루에 이만큼만 사용할게요</p>
+        <div class="stepper">
+          <button id="goalMinus" class="step-btn" aria-label="줄이기">−</button>
+          <span id="goalValue" class="step-value">3시간</span>
+          <button id="goalPlus" class="step-btn" aria-label="늘리기">+</button>
         </div>
-        <div class="goal-custom">
-          <span>직접 입력</span>
-          <input id="goalCustom" type="number" min="1" max="24" placeholder="시간" />
-          <span>시간</span>
+        <p class="step-hint">30분 단위로 조절돼요</p>
+        <div class="preset-chips" id="goalOptions">
+          <button class="preset-chip" data-min="60">1시간</button>
+          <button class="preset-chip" data-min="120">2시간</button>
+          <button class="preset-chip" data-min="180">3시간</button>
+          <button class="preset-chip" data-min="240">4시간</button>
+          <button class="preset-chip" data-min="300">5시간</button>
         </div>
         <div class="modal-actions">
           <button id="goalCancel" class="btn-ghost">취소</button>
@@ -163,7 +187,9 @@
         </div>
       </div>
     </div>
+
   </div>
+ </div>
 
   <script src="app.js"></script>
 </body>
