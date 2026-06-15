@@ -131,33 +131,33 @@ function fmt(min){
   if(h) return `${h}시간`;
   return `${m}분`;
 }
-function levelOf(min){
-  const h = min/60;
-  if(h < 2) return 0;
-  if(h < 4) return 1;
-  if(h < 5) return 2;
-  if(h < 7) return 3;
-  return 4;
-}
-// 끄숑 컨디션(에너지): 5단계 임계값에 묶어 계산 → 게이지와 표정/단계가 항상 일치
-//  1단계(0~2h)=100~80% · 2(2~4h)=80~60% · 3(4~5h)=60~40% · 4(5~7h)=40~20% · 5(7h~)=20~0%
-const ENERGY_BANDS = [
-  { lo:0, hi:2,  top:100, bot:80 },
-  { lo:2, hi:4,  top:80,  bot:60 },
-  { lo:4, hi:5,  top:60,  bot:40 },
-  { lo:5, hi:7,  top:40,  bot:20 },
-  { lo:7, hi:10, top:20,  bot:0  },   // 7h~10h 구간을 20~0%로 보간, 10h 이상은 0%
+// 단계·컨디션은 모두 "목표 대비 사용 비율(r = 사용시간 / 목표시간)"을 단일 기준으로 쓴다.
+//  → 목표 상태(goalStatus)와 캐릭터 단계·표정·멘트·게이지가 항상 같은 방향으로 움직인다(따로 놀지 않음).
+//  경계: r<0.5 1단계 · r<1.0 2단계 · r<1.25 3단계 · r<1.75 4단계 · 그 이상 5단계.
+//  특히 r=1.0(목표 도달) 지점에서 "목표 초과" 경고와 캐릭터 경고 단계가 동시에 켜진다.
+//  컨디션(%)도 같은 구간에 묶어 보간: 1단계 100~80 · 2 80~60 · 3 60~40 · 4 40~20 · 5 20~0.
+const STATE_BANDS = [
+  { lo:0,    hi:0.5,  lvl:0, top:100, bot:80 },
+  { lo:0.5,  hi:1.0,  lvl:1, top:80,  bot:60 },
+  { lo:1.0,  hi:1.25, lvl:2, top:60,  bot:40 },
+  { lo:1.25, hi:1.75, lvl:3, top:40,  bot:20 },
+  { lo:1.75, hi:2.5,  lvl:4, top:20,  bot:0  },   // 175~250%를 20~0%로 보간, 그 이상은 0%
 ];
-function energyOf(min){
-  const h = min / 60;
-  if(h <= 0) return 100;
-  for(const b of ENERGY_BANDS){
-    if(h < b.hi || b.hi === 10){
-      const t = Math.min(1, Math.max(0, (h - b.lo) / (b.hi - b.lo)));
-      return Math.round(b.top - (b.top - b.bot) * t);
-    }
-  }
-  return 0;
+function ratioOf(min, goal){
+  if(goal <= 0) return min > 0 ? 99 : 0;   // 목표 0 방어: 사용 중이면 최악 단계로
+  return min / goal;
+}
+function bandOf(r){
+  for(const b of STATE_BANDS){ if(r < b.hi) return b; }
+  return STATE_BANDS[STATE_BANDS.length - 1];
+}
+function levelOf(min, goal){ return bandOf(ratioOf(min, goal)).lvl; }
+function energyOf(min, goal){
+  const r = ratioOf(min, goal);
+  if(r <= 0) return 100;
+  const b = bandOf(r);
+  const t = Math.min(1, Math.max(0, (r - b.lo) / (b.hi - b.lo)));
+  return Math.round(b.top - (b.top - b.bot) * t);
 }
 function pick(arr, seed){ return arr[seed % arr.length]; }
 // 날짜 기반 시드: 멘트를 '그날 하루는 고정 + 매일 달라짐'으로 (클릭해도 안 바뀜)
@@ -181,7 +181,7 @@ function currentBg(){
 // ---- 홈 렌더 ----
 function renderHome(){
   const usage = store.usage, goal = store.goal, mode = store.mode;
-  const lv = levelOf(usage);
+  const lv = levelOf(usage, goal);
   const L = LEVELS[lv];
 
   // accent 색 전체 반영
@@ -205,7 +205,7 @@ function renderHome(){
   // 끄숑 컨디션 카드
   $('condFace').innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${L.face}</svg>`;
   $('condName').textContent = L.condName;
-  const energy = energyOf(usage);
+  const energy = energyOf(usage, goal);
   $('condPct').textContent = `컨디션 ${energy}%`;
   $('condFill').style.width = energy + '%';
   $('condMsg').textContent = L.msg;
