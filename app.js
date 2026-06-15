@@ -30,12 +30,13 @@ const FACES = [
 // ---- 단계 정의 (사용시간 5단계) ----
 // img: 단계별 캐릭터 그림이 준비되면 경로만 교체하면 외형 변화로도 확장 가능
 const CHAR = 'assets/characters/kkeusyong.png';
+// accent: UI 강조(게이지/배경)용 · ink: 흰 카드 위 글씨용(대비 확보를 위해 더 진하게)
 const LEVELS = [
-  { name:'아주 좋은 흐름', condName:'쌩쌩 끄숑',     msg:'끄숑이 컨디션이 최고예요! 지금처럼만 해주세요.',        face:FACES[0], accent:'#5bbd72', soft:'#eaf6ec', filter:'none', img:CHAR },
-  { name:'괜찮은 편',     condName:'기분 좋은 끄숑', msg:'끄숑이 아직 쌩쌩해요. 잘 지켜주고 있어요.',             face:FACES[1], accent:'#7cb95f', soft:'#eef6e3', filter:'none', img:CHAR },
-  { name:'주의 필요',     condName:'나른한 끄숑',   msg:'끄숑이 조금 나른해졌어요. 잠깐 쉬게 해줄까요?',          face:FACES[2], accent:'#e3ad36', soft:'#fbf2d8', filter:'saturate(.92)', img:CHAR },
-  { name:'사용시간 많음', condName:'지친 끄숑',     msg:'끄숑이 많이 지쳤어요. 휴대폰을 잠깐 내려놔 주세요.',      face:FACES[3], accent:'#e3893c', soft:'#fbecdc', filter:'saturate(.8) brightness(.97)', img:CHAR },
-  { name:'디톡스 필요',   condName:'방전된 끄숑',   msg:'끄숑이 방전됐어요… 지금 끄숑이에겐 휴식이 필요해요.',     face:FACES[4], accent:'#df564b', soft:'#fbe6e3', filter:'saturate(.65) brightness(.93)', img:CHAR },
+  { name:'아주 좋은 흐름', condName:'쌩쌩 끄숑',     msg:'끄숑이 컨디션이 최고예요! 지금처럼만 해주세요.',        face:FACES[0], accent:'#5bbd72', soft:'#eaf6ec', ink:'#2f8f4a', filter:'none', img:CHAR },
+  { name:'괜찮은 편',     condName:'기분 좋은 끄숑', msg:'끄숑이 아직 쌩쌩해요. 잘 지켜주고 있어요.',             face:FACES[1], accent:'#7cb95f', soft:'#eef6e3', ink:'#41902f', filter:'none', img:CHAR },
+  { name:'주의 필요',     condName:'나른한 끄숑',   msg:'끄숑이 조금 나른해졌어요. 잠깐 쉬게 해줄까요?',          face:FACES[2], accent:'#e3ad36', soft:'#fbf2d8', ink:'#a87908', filter:'saturate(.92)', img:CHAR },
+  { name:'사용시간 많음', condName:'지친 끄숑',     msg:'끄숑이 많이 지쳤어요. 휴대폰을 잠깐 내려놔 주세요.',      face:FACES[3], accent:'#e3893c', soft:'#fbecdc', ink:'#bc5e14', filter:'saturate(.8) brightness(.97)', img:CHAR },
+  { name:'디톡스 필요',   condName:'방전된 끄숑',   msg:'끄숑이 방전됐어요… 지금 끄숑이에겐 휴식이 필요해요.',     face:FACES[4], accent:'#df564b', soft:'#fbe6e3', ink:'#c5372c', filter:'saturate(.65) brightness(.93)', img:CHAR },
 ];
 
 // ---- 멘트 (3개 톤: 일반 / 사용시간 많음 / 위험 단계) ----
@@ -187,6 +188,7 @@ function renderHome(){
   // accent 색 전체 반영
   document.documentElement.style.setProperty('--accent', L.accent);
   document.documentElement.style.setProperty('--accent-soft', L.soft);
+  document.documentElement.style.setProperty('--accent-ink', L.ink);
   document.documentElement.style.setProperty('--accent-back', ['#cfe8d2','#d3e8cd','#f1e1b0','#f4d4b6','#f3c3bd'][lv]);
 
   // 캐릭터 이미지 (지금은 동일, 단계별 그림 준비 시 L.img 교체로 외형 변화 가능)
@@ -202,25 +204,27 @@ function renderHome(){
   // 말풍선 (사용시간 단계 → 톤, 그 안에서 날짜 기반으로 하루 고정)
   $('bubble').textContent = pick(MENTS[mode][TIER_OF_LEVEL[lv]], daySeed());
 
-  // 끄숑 컨디션 카드
+  // 끄숑 컨디션 (표정 + 컨디션% + 게이지)
   $('condFace').innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${L.face}</svg>`;
   $('condName').textContent = L.condName;
   const energy = energyOf(usage, goal);
   $('condPct').textContent = `컨디션 ${energy}%`;
   $('condFill').style.width = energy + '%';
-  $('condMsg').textContent = L.msg;
 
-  // 사용시간
+  // 오늘 / 목표 / 남은·초과 3분할 + 목표 대비 문구
   $('usageBig').textContent = fmt(usage);
-  const ratio = goal > 0 ? Math.min(1, usage / goal) : 0;
-  const fill = $('usageFill');
-  fill.style.width = (ratio * 100) + '%';
-  fill.classList.toggle('over', usage > goal);
-  const gs = $('goalStatus');
-  if(usage < goal){ gs.textContent = `앞으로 ${fmt(goal - usage)} 더 쓸 수 있어요`; gs.className = 'goal-status-line pos'; }
-  else if(usage > goal){ gs.textContent = `목표를 ${fmt(usage - goal)} 넘었어요`; gs.className = 'goal-status-line neg'; }
-  else { gs.textContent = '오늘 쓸 수 있는 시간을 다 썼어요'; gs.className = 'goal-status-line pos'; }
   $('goalText').textContent = fmt(goal);
+  const gs = $('goalStatus'), rl = $('remainLabel'), rv = $('remainValue'), rc = $('remainCol');
+  if(usage < goal){
+    gs.textContent = `목표보다 ${fmt(goal - usage)} 적게 사용했어요`; gs.className = 'goal-status-line pos';
+    rl.textContent = '남은 시간'; rv.textContent = fmt(goal - usage); rc.className = 'stat-col remain pos';
+  } else if(usage > goal){
+    gs.textContent = `목표보다 ${fmt(usage - goal)} 더 사용했어요`; gs.className = 'goal-status-line neg';
+    rl.textContent = '초과 시간'; rv.textContent = fmt(usage - goal); rc.className = 'stat-col remain neg';
+  } else {
+    gs.textContent = '목표를 딱 맞췄어요'; gs.className = 'goal-status-line pos';
+    rl.textContent = '남은 시간'; rv.textContent = '0분'; rc.className = 'stat-col remain pos';
+  }
 
   // 모드 버튼
   $('modeT').classList.toggle('active', mode === 'T');
@@ -252,11 +256,11 @@ function renderRecord(){
 
   // 하단 통계 — 평균 / 가장 많은 기간
   const avg = Math.round(vals.reduce((a,b)=>a+b,0) / vals.length);
-  let low = 0; vals.forEach((v,i)=>{ if(v < vals[low]) low = i; });
+  let high = 0; vals.forEach((v,i)=>{ if(v > vals[high]) high = i; });
   $('statAvgLabel').textContent = isDaily ? '일 평균' : '월 평균';
   $('statAvg').textContent = fmt(avg);
-  $('statPeakLabel').textContent = isDaily ? '가장 적은 날' : '가장 적은 달';
-  $('statPeak').textContent = `${labels[low].main} · ${fmt(vals[low])}`;
+  $('statPeakLabel').textContent = isDaily ? '가장 많은 날' : '가장 많은 달';
+  $('statPeak').textContent = `${labels[high].main} · ${fmt(vals[high])}`;
 
   // 그래프 (막대 색 통일, 현재 기간만 강조 / 요일+날짜 라벨)
   const max = Math.max(...vals);
@@ -321,13 +325,51 @@ function fitDevice(){
 }
 window.addEventListener('resize', fitDevice);
 
-// ===== 이벤트 바인딩 =====
+// ===== 온보딩 캐러셀 (3장) =====
+const OB_COUNT = 3;
+let obIdx = 0;
+const obTrack = $('obTrack');
+const obNext = $('obNext');
+const obSkip = $('obSkip');
+const obDots = [...document.querySelectorAll('.ob-dot')];
+
+// 마지막 장에서만 동의 여부로 버튼 활성화 제어
 function checkConsent(){
-  $('startBtn').disabled = !($('agreePrivacy').checked && $('agreeUsage').checked);
+  if(obIdx !== OB_COUNT - 1) return;
+  obNext.disabled = !($('agreePrivacy').checked && $('agreeUsage').checked);
 }
+function renderOb(){
+  obIdx = Math.max(0, Math.min(OB_COUNT - 1, obIdx));
+  obTrack.style.transform = `translateX(-${obIdx * (100 / OB_COUNT)}%)`;
+  obDots.forEach((d, k) => d.classList.toggle('active', k === obIdx));
+  const last = obIdx === OB_COUNT - 1;
+  obNext.textContent = last ? '끄숑이랑 시작하기' : '다음';
+  obSkip.classList.toggle('hide', last);
+  if(last) checkConsent(); else obNext.disabled = false;
+}
+function obGo(i){ obIdx = i; renderOb(); }
+
+obNext.addEventListener('click', () => {
+  if(obIdx < OB_COUNT - 1){ obGo(obIdx + 1); }
+  else { store.onboarded = true; enterApp(); }
+});
+obSkip.addEventListener('click', () => obGo(OB_COUNT - 1));
+obDots.forEach((d, k) => d.addEventListener('click', () => obGo(k)));
 $('agreePrivacy').addEventListener('change', checkConsent);
 $('agreeUsage').addEventListener('change', checkConsent);
-$('startBtn').addEventListener('click', () => { store.onboarded = true; enterApp(); });
+
+// 좌우 스와이프로 장 이동
+let obStartX = null;
+const obView = document.querySelector('.ob-viewport');
+obView.addEventListener('touchstart', e => { obStartX = e.touches[0].clientX; }, { passive:true });
+obView.addEventListener('touchend', e => {
+  if(obStartX == null) return;
+  const dx = e.changedTouches[0].clientX - obStartX; obStartX = null;
+  if(Math.abs(dx) < 40) return;
+  if(dx < 0 && obIdx < OB_COUNT - 1) obGo(obIdx + 1);
+  else if(dx > 0 && obIdx > 0) obGo(obIdx - 1);
+});
+renderOb();
 
 document.querySelectorAll('.nav-btn').forEach(b =>
   b.addEventListener('click', () => showTab(b.dataset.tab)));

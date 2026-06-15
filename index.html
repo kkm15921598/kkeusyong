@@ -5,41 +5,105 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>끄숑 · 디지털디톡스 코치</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+  <!-- 본문 폰트: 페이퍼로지(Paperlogy) · SIL OFL (상업적 이용 가능) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy.css" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
  <div class="viewport">
   <div class="device" id="device">
 
-    <!-- ===== 온보딩 / 권한 동의 ===== -->
+    <!-- ===== 온보딩 (3장 캐러셀) ===== -->
     <section id="onboarding" class="screen onboarding">
-      <div class="ob-inner">
-        <img class="ob-char" src="assets/characters/kkeusyong.png" alt="끄숑" />
-        <h1 class="ob-title">끄숑</h1>
-        <p class="ob-sub">끄숑이가 휴대폰 사용시간에 맞춰<br/>디지털디톡스를 도와드려요.</p>
+      <button id="obSkip" class="ob-skip">건너뛰기</button>
 
-        <div class="ob-card">
-          <label class="consent">
-            <input type="checkbox" id="agreePrivacy" />
-            <span class="consent-box"></span>
-            <span class="consent-text">
-              <b>개인정보 수집·이용 동의</b> (필수)<br/>
-              <small>사용시간 분석 및 코칭 제공을 위해 기기 사용 정보를 수집합니다.</small>
-            </span>
-          </label>
-          <label class="consent">
-            <input type="checkbox" id="agreeUsage" />
-            <span class="consent-box"></span>
-            <span class="consent-text">
-              <b>사용정보 접근 권한 동의</b> (필수)<br/>
-              <small>Android 사용정보 접근 권한(Usage Stats)으로 휴대폰 사용시간을 측정합니다.</small>
-            </span>
-          </label>
+      <div class="ob-viewport">
+        <div class="ob-track" id="obTrack">
+
+          <!-- 1장 · 환영 -->
+          <div class="ob-slide">
+            <div class="ob-inner">
+              <span class="ob-tag">디지털디톡스 코치</span>
+              <div class="ob-hero">
+                <img class="ob-char floaty" src="assets/characters/kkeusyong.png" alt="끄숑" />
+              </div>
+              <h1 class="ob-title">안녕하세요, 끄숑이에요</h1>
+              <p class="ob-sub">설치만 해도 관리받는 디지털디톡스.<br/>끄숑이가 휴대폰 사용시간을 살펴보고<br/>먼저 말을 걸어줄게요.</p>
+            </div>
+          </div>
+
+          <!-- 2장 · 작동 방식 -->
+          <div class="ob-slide">
+            <div class="ob-inner ob-top">
+              <div class="ob-hero sm">
+                <img class="ob-char floaty" src="assets/characters/kkeusyong.png" alt="끄숑" />
+              </div>
+              <h2 class="ob-title sm">사용할수록 끄숑이가 반응해요</h2>
+              <div class="feat-list">
+                <div class="feat-row">
+                  <span class="feat-ico good">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
+                  </span>
+                  <div class="feat-txt"><b>적게 쓰면 칭찬해요</b><small>쌩쌩한 끄숑이 응원해줘요</small></div>
+                </div>
+                <div class="feat-row">
+                  <span class="feat-ico warn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
+                  </span>
+                  <div class="feat-txt"><b>많이 쓰면 걱정해요</b><small>지친 끄숑이 잠깐 쉬자고 해요</small></div>
+                </div>
+                <div class="feat-row">
+                  <span class="feat-ico chat">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>
+                  </span>
+                  <div class="feat-txt"><b>T·F 말투를 골라요</b><small>팩폭형 / 위로형 코칭 중 선택</small></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3장 · 권한 동의 -->
+          <div class="ob-slide">
+            <div class="ob-inner ob-top">
+              <div class="ob-hero sm">
+                <img class="ob-char" src="assets/characters/kkeusyong.png" alt="끄숑" />
+              </div>
+              <h2 class="ob-title sm">시작하기 전에</h2>
+              <p class="ob-sub">아래 권한에 동의하면 끄숑이가<br/>사용시간을 측정해 코칭할 수 있어요.</p>
+
+              <div class="ob-card">
+                <label class="consent">
+                  <input type="checkbox" id="agreePrivacy" />
+                  <span class="consent-box"></span>
+                  <span class="consent-text">
+                    <b>개인정보 수집·이용 동의</b> (필수)<br/>
+                    <small>사용시간 분석 및 코칭 제공을 위해 기기 사용 정보를 수집합니다.</small>
+                  </span>
+                </label>
+                <label class="consent">
+                  <input type="checkbox" id="agreeUsage" />
+                  <span class="consent-box"></span>
+                  <span class="consent-text">
+                    <b>사용정보 접근 권한 동의</b> (필수)<br/>
+                    <small>Android 사용정보 접근 권한(Usage Stats)으로 휴대폰 사용시간을 측정합니다.</small>
+                  </span>
+                </label>
+              </div>
+
+              <p class="ob-note">* 프로토타입에서는 실제 권한 대신 임시 데이터로 동작합니다.</p>
+            </div>
+          </div>
+
         </div>
+      </div>
 
-        <p class="ob-note">* 프로토타입에서는 실제 권한 대신 임시 데이터로 동작합니다.</p>
-        <button id="startBtn" class="btn-primary" disabled>끄숑이랑 시작하기</button>
+      <div class="ob-footer">
+        <div class="ob-dots" id="obDots">
+          <span class="ob-dot active"></span>
+          <span class="ob-dot"></span>
+          <span class="ob-dot"></span>
+        </div>
+        <button id="obNext" class="btn-primary">다음</button>
       </div>
     </section>
 
@@ -63,54 +127,46 @@
           <div class="char-shadow"></div>
         </div>
 
-        <!-- ===== 하단 글래스 카드 영역 (2026 Liquid-Glass / Bento) ===== -->
+        <!-- ===== 하단 글래스 카드 (상태 + 사용시간 통합) ===== -->
         <div class="dock">
+          <div class="glass-card home-card">
 
-          <!-- 끄숑 컨디션 (펫 케어형 상태) -->
-          <div id="conditionCard" class="glass-card condition-card">
-            <div class="gc-head">
-              <span class="gc-badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></svg>
-              </span>
-              <span class="gc-title">오늘의 상태</span>
-            </div>
-
-            <div class="cond-body">
+            <!-- 상태 헤더: 표정 + 라벨·이름 + 컨디션% -->
+            <div class="hc-state">
               <span id="condFace" class="cond-face"></span>
               <div class="cond-meta">
+                <span class="hc-label">오늘의 끄숑</span>
                 <span id="condName" class="cond-name">기분 좋은 끄숑</span>
-                <span id="condPct" class="cond-sub">컨디션 72%</span>
+              </div>
+              <span id="condPct" class="cond-pct">컨디션 72%</span>
+            </div>
+
+            <!-- 목표 대비 문구 + 게이지 -->
+            <p id="goalStatus" class="goal-status-line pos">목표보다 45분 적게 사용했어요</p>
+            <div class="cond-gauge"><div id="condFill" class="cond-fill"></div></div>
+
+            <div class="hc-divider"></div>
+
+            <!-- 오늘 / 목표 / 남은(초과) 3분할 -->
+            <div class="stat-row">
+              <div class="stat-col">
+                <span class="stat-col-label">오늘 사용시간</span>
+                <b id="usageBig" class="stat-col-val">2시간 15분</b>
+              </div>
+              <div class="stat-col">
+                <button id="editGoalBtn" class="stat-col-label">
+                  목표시간
+                  <svg class="goal-edit-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                </button>
+                <b id="goalText" class="stat-col-val">3시간</b>
+              </div>
+              <div id="remainCol" class="stat-col remain pos">
+                <span id="remainLabel" class="stat-col-label">남은 시간</span>
+                <b id="remainValue" class="stat-col-val">45분</b>
               </div>
             </div>
 
-            <div class="cond-gauge"><div id="condFill" class="cond-fill"></div></div>
-            <p id="condMsg" class="cond-msg">끄숑이 아직 쌩쌩해요. 잘 지켜주고 있어요.</p>
-
-            <!-- 일러스트 슬롯: 복슬 하트 -->
-            <span class="deco-slot deco-blob" data-label="blob">
-              <img src="assets/characters/deco1.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('empty')" />
-            </span>
           </div>
-
-          <!-- 오늘 사용시간 + 목표 -->
-          <div class="glass-card usage-card">
-            <div class="usage-head">
-              <span class="card-label">오늘 사용시간</span>
-              <button id="editGoalBtn" class="goal-edit">
-                목표 <b id="goalText">3시간</b>
-                <svg class="goal-edit-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-              </button>
-            </div>
-            <p id="usageBig" class="usage-big">2시간 15분</p>
-            <div class="usage-bar"><div id="usageFill" class="usage-fill"></div></div>
-            <p id="goalStatus" class="goal-status-line pos">목표까지 45분 남았어요</p>
-
-            <!-- 일러스트 슬롯: 펠트 꽃 -->
-            <span class="deco-slot deco-flower" data-label="flower">
-              <img src="assets/characters/deco2.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('empty')" />
-            </span>
-          </div>
-
         </div>
       </div>
     </section>
@@ -141,7 +197,7 @@
               <b id="statAvg">3시간 4분</b>
             </div>
             <div class="stat-mini">
-              <span class="stat-mini-label" id="statPeakLabel">가장 적은 날</span>
+              <span class="stat-mini-label" id="statPeakLabel">가장 많은 날</span>
               <b id="statPeak">월 2시간</b>
             </div>
           </div>
