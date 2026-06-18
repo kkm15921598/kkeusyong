@@ -319,6 +319,11 @@ function petKkeusyong(){
 // ===== 반응형: 디바이스 균등 스케일 =====
 function fitDevice(){
   const d = $('device');
+  // 실제 휴대폰(좁은 화면)에서는 목업 프레임 없이 화면을 꽉 채움 → 스케일 적용 안 함
+  if (window.matchMedia('(max-width: 480px)').matches){
+    d.style.transform = 'none';
+    return;
+  }
   const margin = 20;
   const scale = Math.min(1, (window.innerWidth - margin) / 390, (window.innerHeight - margin) / 844);
   d.style.transform = `scale(${scale})`;

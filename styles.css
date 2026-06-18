@@ -22,6 +22,18 @@ body{
 .screen{ position:absolute; inset:0; }
 .hidden{ display:none !important; }
 
+/* ===== 실제 휴대폰: 목업 프레임 벗고 화면을 꽉 채움 ===== */
+@media (max-width: 480px){
+  .viewport{ display:block; }
+  .device{
+    width:100%; height:100%;
+    /* 모바일 브라우저 주소창까지 고려한 동적 뷰포트 높이 */
+    width:100dvw; height:100dvh;
+    border-radius:0; border:none; box-shadow:none;
+    transform:none;
+  }
+}
+
 .scroll{
   position:absolute; inset:0 0 76px 0; overflow:hidden;
   padding:30px 20px 14px; display:flex; flex-direction:column;
@@ -136,7 +148,7 @@ body{
 @keyframes popIn{ from{ opacity:0; transform:translateY(-4px) scale(.98);} to{ opacity:1; transform:none;} }
 
 /* ===== 캐릭터 (잔잔한 플로팅 + 그림자 + 쓰다듬기) ===== */
-.character{ position:relative; flex:0 0 auto; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; margin:auto 0 -12px; overflow:visible; }
+.character{ position:relative; flex:0 0 auto; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; margin:auto 0 18px; overflow:visible; }
 /* 끄숑 뒤 은은한 어두운 헤일로 → 크림색 캐릭터가 또렷하게 보이도록 */
 .character::before{
   content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
